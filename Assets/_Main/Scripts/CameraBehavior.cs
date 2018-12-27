@@ -21,9 +21,6 @@ public class CameraBehavior : MonoBehaviour
     [SerializeField]
     ECamTarget currentTarget = ECamTarget.CREW1;
 
-
-
-
     Vector3 targetPos;
 
     // Start is called before the first frame update
@@ -38,18 +35,19 @@ public class CameraBehavior : MonoBehaviour
         
         UpdateTargetPos();
 
-        //TODO: Follow targetPos with lerp
         transform.position = Vector3.Lerp(transform.position, targetPos, inertia) + offset;
 
     }
 
-    void ChangeTarget(ECamTarget newTarget){
+    void ChangeTarget(ECamTarget newTarget)
+    {
 
         currentTarget = newTarget;
 
     }
 
-    void UpdateTargetPos(){
+    void UpdateTargetPos()
+    {
         
         switch(currentTarget){
             case ECamTarget.CREW1:
@@ -65,4 +63,5 @@ public class CameraBehavior : MonoBehaviour
                 break;
         }
     }
+
 }
