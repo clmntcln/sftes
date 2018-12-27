@@ -16,10 +16,12 @@ public class Cursor : MonoBehaviour
 
     SpriteRenderer tailRenderer;
 
+    [HideInInspector]
     public Vector3 origin = new Vector3();
+    [HideInInspector]
     public Vector3 target = new Vector3();
 
-    bool isVisible = true;
+    bool isVisible = false;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +54,7 @@ public class Cursor : MonoBehaviour
 
     }
 
-    public void setCursorVisibility(bool state)
+    public void SetCursorVisibility(bool state)
     {
 
         isVisible = state;
@@ -61,4 +63,15 @@ public class Cursor : MonoBehaviour
         head.SetActive(isVisible);
 
     }
+
+    public void ToggleCursorVisibility()
+    {
+
+        isVisible = !isVisible;
+
+        tail.SetActive(isVisible);
+        head.SetActive(isVisible);
+
+    }
+
 }

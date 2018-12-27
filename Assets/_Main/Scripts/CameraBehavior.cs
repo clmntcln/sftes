@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ECamTarget { CREW1, CREW2, CURSOR };
 
 public class CameraBehavior : MonoBehaviour
 {
+    public enum ECamTarget { CREW1, CREW2, CURSOR };
 
     [Header("Managers")]
     public InputManager inputManager;
@@ -37,9 +37,9 @@ public class CameraBehavior : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, targetPos, inertia) + offset;
 
-    }
+    } 
 
-    void ChangeTarget(ECamTarget newTarget)
+    public void ChangeTarget(ECamTarget newTarget)
     {
 
         currentTarget = newTarget;

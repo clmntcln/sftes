@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    [HideInInspector]
+    public enum EInput { CONFIRM, CANCEL };
+
+    [Header("Managers")]
+    public WorldUIManager worldUIManager;
+    public CrewManager crewManager;
+    public CameraBehavior cameraBehavior;
 
     enum EAbilities { MOVE, ATTACK, SPECIAL };
 
-    bool trackCursor = true;
+    bool trackCursor = false;
 
     public Vector3 cursorPos = new Vector3(0, 0, 0);
 
@@ -39,7 +46,9 @@ public class InputManager : MonoBehaviour
                 cursorPos = hit.point;
             }
         }
-        
+
+        CheckAbilitiesInput();
+
     }
 
     void SetCursorTracking(bool state)
@@ -49,7 +58,29 @@ public class InputManager : MonoBehaviour
 
     }
 
-    void CheckAbilitiesInput(){
+    void ToggleCursorTracking()
+    {
+
+        trackCursor = !trackCursor;
+
+    }
+
+    void CheckAbilitiesInput()
+    {
+
+        if (Input.GetKeyDown(KeyCode.C)){
+            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CREW1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CREW2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CURSOR);
+        }
 
         //Check if player wants to launch ability
         //Communicates info to crew manager 
@@ -57,5 +88,34 @@ public class InputManager : MonoBehaviour
 
         //Also check for cancel input
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            InputInfo inputInfo = new InputInfo(EInput.CONFIRM, cursorPos);
+            crewManager.DispatchInput(inputInfo);
+        }
+
+        //1
+        //Toggle move ability
+        if(Input.GetKeyDown(KeyCode.Tab)){
+            worldUIManager.moveCursor.ToggleCursorVisibility();
+            ToggleCursorTracking();
+            crewManager.ToggleMoveAbility();
+        }
+
+    }
+
+    public class InputInfo{
+        
+        public EInput action;
+        public Vector3 targetPoint;
+        public GameObject targetObject;
+
+        public InputInfo(EInput actionName, Vector3 targetPoint = new Vector3(), GameObject targetObject = null){
+
+            this.action = actionName;
+            this.targetPoint = targetPoint;
+            this.targetObject = targetObject;
+
+        }
     }
 }

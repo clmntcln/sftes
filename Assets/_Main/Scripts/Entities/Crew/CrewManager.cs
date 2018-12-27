@@ -6,7 +6,7 @@ public class CrewManager : MonoBehaviour
 {
 
     //List of current crew characters
-    public List<GameObject> members = new List<GameObject>();
+    public List<CrewMember> members = new List<CrewMember>();
 
     //Functions to kick crew member
     public int selectedMember = 0;
@@ -23,7 +23,8 @@ public class CrewManager : MonoBehaviour
         
     }
 
-    void SelectMember(int index){
+    void SelectMember(int index)
+    {
 
         //If current member is using an ability, cancel it
         selectedMember = index;
@@ -32,7 +33,19 @@ public class CrewManager : MonoBehaviour
 
     }
 
-    void DispatchPlayerInput(){
+    public void DispatchInput(InputManager.InputInfo inputInfo)
+    {
+        
+        if(members[selectedMember].holdMove && inputInfo.action == InputManager.EInput.CONFIRM)
+        {
+            members[selectedMember].Move(inputInfo.targetPoint);
+        }
+        
 
+    }
+
+    public void ToggleMoveAbility()
+    {
+        members[selectedMember].holdMove = !members[selectedMember].holdMove;
     }
 }
