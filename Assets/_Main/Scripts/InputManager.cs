@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
 
     enum EAbilities { MOVE, ATTACK, SPECIAL };
 
-    bool trackCursor = false;
+    bool trackCursor = true;
 
     public Vector3 cursorPos = new Vector3(0, 0, 0);
 
@@ -26,8 +26,8 @@ public class InputManager : MonoBehaviour
     void Update()
     {
 
-        if(trackCursor){
-            //Raycast on ground to get target position
+        if(trackCursor)
+        {
 
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -54,6 +54,8 @@ public class InputManager : MonoBehaviour
         //Check if player wants to launch ability
         //Communicates info to crew manager 
         //Crew manager dispatches info to current crew member selected
+
+        //Also check for cancel input
 
     }
 }

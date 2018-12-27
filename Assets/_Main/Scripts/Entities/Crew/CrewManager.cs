@@ -6,10 +6,10 @@ public class CrewManager : MonoBehaviour
 {
 
     //List of current crew characters
-    List<GameObject> members = new List<GameObject>();
+    public List<GameObject> members = new List<GameObject>();
 
     //Functions to kick crew member
-    int selectedMember = 0;
+    public int selectedMember = 0;
 
     // Start is called before the first frame update
     void Start()

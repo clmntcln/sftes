@@ -7,6 +7,11 @@ public class WorldUIManager : MonoBehaviour
 
     [Header("Managers")]
     public InputManager inputManager;
+    public CrewManager crewManager;
+
+    [Header("Cursors")]
+    public Cursor moveCursor;
+    public Cursor attackCursor;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +24,10 @@ public class WorldUIManager : MonoBehaviour
     void Update()
     {
 
-        
+        //Feed origin and target to cursors
+        moveCursor.origin = crewManager.members[crewManager.selectedMember].transform.position;
+        moveCursor.target = inputManager.cursorPos;
+
+
     }
 }
