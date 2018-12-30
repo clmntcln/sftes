@@ -11,7 +11,7 @@ public class CrewMember : MonoBehaviour
     public Cursor moveCursor;
     public Cursor attackCursor;
 
-    [Range(1, 10)]
+    [Range(0, 20)]
     public float speed = 1.0f;
 
     public List<Ability> abilities = new List<Ability>();
@@ -27,8 +27,8 @@ public class CrewMember : MonoBehaviour
 
         hpManager = transform.GetComponent<Damageable>();
 
-        abilities.Add(new Abilities.Move(transform.gameObject, 10.0f, 0.01f, moveCursor));
-        abilities.Add(new Abilities.Shoot(10.0f, 0.01f, attackCursor));
+        abilities.Add(new Abilities.Move(transform.gameObject, this.speed, 10.0f, 0.05f, moveCursor));
+        abilities.Add(new Abilities.Shoot(10.0f, 0.04f, attackCursor));
 
     }
 

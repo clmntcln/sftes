@@ -10,6 +10,10 @@ public class WorldUIManager : MonoBehaviour
     public InputManager inputManager;
     public CrewManager crewManager;
 
+    [Header("Crew")]
+    public GameObject selectedMemberCircle;
+    Vector3 selectedMemberCircleYOffset = new Vector3(0, 0.1f, 0);
+
     [Header("Cursors")]
     public Cursor moveCursor;
     public Cursor attackCursor;
@@ -30,6 +34,8 @@ public class WorldUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        selectedMemberCircle.transform.position = crewManager.selectedMember.transform.position + selectedMemberCircleYOffset;
 
         //Feed origin and target to cursors
         moveCursor.origin = crewManager.selectedMember.transform.position;

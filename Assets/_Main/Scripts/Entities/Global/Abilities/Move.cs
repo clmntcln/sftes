@@ -8,13 +8,14 @@ namespace Abilities
     public class Move : Ability
     {
 
-        string name = "Move";
+        public string name = "Move";
         public float speed = 1.0f;
         GameObject objToMove;
 
-        public Move(GameObject obj, float totalCharge, float cooldownRate, Cursor cursor) : base(cursor)
+        public Move(GameObject obj, float speed, float totalCharge, float cooldownRate, Cursor cursor) : base(cursor)
         {
             this.objToMove = obj;
+            this.speed = speed;
             this.currentCharge = totalCharge;
             this.totalCharge = totalCharge;
             this.cdRate = cooldownRate;
@@ -34,6 +35,7 @@ namespace Abilities
             parameters.Add("position", target);
             parameters.Add("time", dist / speed);
             parameters.Add("oncomplete", "ReadyToRecharge");
+            parameters.Add("easetype", "linear");
 
             iTween.MoveTo(objToMove, parameters);
 

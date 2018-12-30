@@ -30,14 +30,19 @@ public class ScreenUIManager : MonoBehaviour
     void Update()
     {
 
-        foreach(CrewMember member in crewManager.members)
-        {
-            //Display abilities recharge in gauges
-            healthSlider.value = (float)member.hpManager.hp / (float)member.hpManager.maxHP;
+        healthSlider.value = (float)crewManager.selectedMember.hpManager.hp / (float)crewManager.selectedMember.hpManager.maxHP;
 
-            moveSlider.value = member.abilities[0].currentCharge / member.abilities[0].totalCharge;
-            attackSlider.value = member.abilities[1].currentCharge / member.abilities[1].totalCharge;
-        }
+        moveSlider.value = crewManager.selectedMember.abilities[0].currentCharge / crewManager.selectedMember.abilities[0].totalCharge;
+        attackSlider.value = crewManager.selectedMember.abilities[1].currentCharge / crewManager.selectedMember.abilities[1].totalCharge;
+
+        // foreach(CrewMember member in crewManager.members)
+        // {
+        //     //Display abilities recharge in gauges
+        //     healthSlider.value = (float)member.hpManager.hp / (float)member.hpManager.maxHP;
+
+        //     moveSlider.value = member.abilities[0].currentCharge / member.abilities[0].totalCharge;
+        //     attackSlider.value = member.abilities[1].currentCharge / member.abilities[1].totalCharge;
+        // }
         
     }
 }
