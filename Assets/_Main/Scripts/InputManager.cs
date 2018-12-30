@@ -10,7 +10,7 @@ public class InputManager : MonoBehaviour
     [Header("Managers")]
     public WorldUIManager worldUIManager;
     public CrewManager crewManager;
-    public CameraBehavior cameraBehavior;
+    public CameraManager cameraManager;
 
     enum EAbilities { MOVE, ATTACK, SPECIAL };
 
@@ -18,14 +18,17 @@ public class InputManager : MonoBehaviour
 
     public Vector3 cursorPos = new Vector3(0, 0, 0);
 
+    GameObject targetObj;
 
     int groundLayer;
+    int damageableLayer;
 
     // Start is called before the first frame update
     void Start()
     {
 
         groundLayer = LayerMask.GetMask("Ground");
+        damageableLayer = LayerMask.GetMask("Damageable");
         
     }
 
@@ -33,32 +36,43 @@ public class InputManager : MonoBehaviour
     void Update()
     {
 
-        if(trackCursor)
+        // if(trackCursor)
+        // {
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
         {
+            Debug.DrawLine(ray.origin, hit.point, Color.blue);
 
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
-            {
-                Debug.DrawLine(ray.origin, hit.point, Color.blue);
-
-                cursorPos = hit.point;
-            }
+            cursorPos = hit.point;
         }
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, damageableLayer))
+        {
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
+            targetObj = hit.collider.gameObject;
+            worldUIManager.SetOverheadTarget(hit.collider.gameObject);
+            
+        } else {
+            targetObj = null;
+            worldUIManager.SetOverheadTarget(null);
+        }
+        //}
 
         CheckAbilitiesInput();
 
     }
 
-    void SetCursorTracking(bool state)
+    public void SetCursorTracking(bool state)
     {
 
         trackCursor = state;
 
     }
 
-    void ToggleCursorTracking()
+    public void ToggleCursorTracking()
     {
 
         trackCursor = !trackCursor;
@@ -68,51 +82,53 @@ public class InputManager : MonoBehaviour
     void CheckAbilitiesInput()
     {
 
+        //Camera focus on character
         if (Input.GetKeyDown(KeyCode.C)){
-            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CREW1);
+            crewManager.SelectMember(0);
         }
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CREW2);
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            cameraBehavior.ChangeTarget(CameraBehavior.ECamTarget.CURSOR);
+            crewManager.SelectMember(1);
         }
 
         //Check if player wants to launch ability
         //Communicates info to crew manager 
         //Crew manager dispatches info to current crew member selected
 
-        //Also check for cancel input
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && crewManager.selectedMember.isHoldingAbility)
         {
-            InputInfo inputInfo = new InputInfo(EInput.CONFIRM, cursorPos);
-            crewManager.DispatchInput(inputInfo);
+
+            InputInfo inputInfo = new InputInfo(cursorPos, targetObj);
+
+            crewManager.selectedMember.UseAbility(crewManager.selectedMember.abilityInUse, inputInfo);
+
         }
 
         //1
         //Toggle move ability
-        if(Input.GetKeyDown(KeyCode.Tab)){
-            worldUIManager.moveCursor.ToggleCursorVisibility();
-            ToggleCursorTracking();
-            crewManager.ToggleMoveAbility();
+        if(Input.GetKeyDown(KeyCode.A)){
+
+            crewManager.ToggleMemberAbility(0);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+
+            crewManager.ToggleMemberAbility(1);
+
         }
 
     }
 
     public class InputInfo{
         
-        public EInput action;
         public Vector3 targetPoint;
         public GameObject targetObject;
 
-        public InputInfo(EInput actionName, Vector3 targetPoint = new Vector3(), GameObject targetObject = null){
+        public InputInfo(Vector3 targetPoint = new Vector3(), GameObject targetObject = null){
 
-            this.action = actionName;
             this.targetPoint = targetPoint;
             this.targetObject = targetObject;
 

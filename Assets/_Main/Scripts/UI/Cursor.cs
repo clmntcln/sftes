@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class Cursor : MonoBehaviour
 {
 
+    [Header("Managers")]
+    public InputManager inputManager;
+
     [Header("Tail")]
     public GameObject tail;
     public Vector3 tailOffset = new Vector3();
@@ -22,6 +25,8 @@ public class Cursor : MonoBehaviour
     public Vector3 target = new Vector3();
 
     bool isVisible = false;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -64,13 +69,16 @@ public class Cursor : MonoBehaviour
 
     }
 
-    public void ToggleCursorVisibility()
+    public void ToggleVisibility()
     {
 
         isVisible = !isVisible;
 
         tail.SetActive(isVisible);
         head.SetActive(isVisible);
+
+        //Also toggle input tracking
+        inputManager.ToggleCursorTracking();
 
     }
 
