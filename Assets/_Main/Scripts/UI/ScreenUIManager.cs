@@ -13,6 +13,10 @@ public class ScreenUIManager : MonoBehaviour
     public GameObject crewMemberPortrait;
     public GameObject crewMemberUI;
 
+    [Header("Portraits")]
+    public List<Portrait> crewPortraits = new List<Portrait>();
+    int selectedPortraitIndex = 0;
+
     [Header("Test")]
     public Slider healthSlider;
     public Slider moveSlider;
@@ -23,7 +27,9 @@ public class ScreenUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        SelectedCharacter(selectedPortraitIndex);
+
     }
 
     // Update is called once per frame
@@ -45,4 +51,12 @@ public class ScreenUIManager : MonoBehaviour
         // }
         
     }
+
+    public void SelectedCharacter(int index)
+    {
+        crewPortraits[selectedPortraitIndex].SetSelected(false);
+        selectedPortraitIndex = index;
+        crewPortraits[selectedPortraitIndex].SetSelected(true);
+    }
+
 }
